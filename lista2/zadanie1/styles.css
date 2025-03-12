@@ -1,0 +1,61 @@
+/* Resetowanie domyślnych stylów */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+    position: relative;
+}
+
+/* Suwak powinien być zawsze w tym samym miejscu */
+.slider-container {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Styl suwaka */
+input[type="range"] {
+    width: 300px;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: blueviolet;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Styl koła */
+.circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+    border: 5px solid blueviolet;
+    border-radius: 50%;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+}
