@@ -1,0 +1,15 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 700px;
+}
+
+.table {
+    margin-top: 20px;
+}
+
+.input-group-text {
+    background-color: #e9ecef;
+}
