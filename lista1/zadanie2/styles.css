@@ -1,51 +1,58 @@
-/* Import czcionki Google Fonts */
+/* Import czcionki Google Fonts - Poppins to nowoczesny, bezszeryfowy font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
-/* Resetowanie domyślnych stylów */
+/* Resetowanie domyślnych stylów dla wszystkich elementów */
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Zapobiega rozciąganiu elementów przez padding i border */
 }
 
+/* Ustawienia dla całej strony */
 html, body {
+    /*
+    - `html` odnosi się do całego dokumentu HTML i pozwala na kontrolowanie np. wysokości strony.
+    - `body` to główny kontener treści, który zawiera widoczną część strony.
+    - Ustawienie `height: 100%` na obu elementach sprawia, że cała strona zajmuje pełne okno przeglądarki.
+    */
     height: 100%;
-    min-width: 240px; /* Minimalna szerokość strony */
-    font-family: 'Poppins', sans-serif;
-    background-color: #f8f9fa; /* Jasne, nowoczesne tło */
-    color: #333;
-    overflow: hidden; /* Ukrywa scroll strony, zostaje tylko w .content */
+    min-width: 240px; /* Zapobiega zbyt wąskiemu widokowi na małych ekranach */
+    font-family: 'Poppins', sans-serif; /* Ustawienie głównej czcionki */
+    background-color: #f8f9fa; /* Subtelne, jasne tło */
+    color: #333; /* Ciemnoszary kolor tekstu dla lepszej czytelności */
+    overflow: hidden; /* Ukrywa przewijanie strony, pozwalając na przewijanie tylko `.content` */
 }
 
 /* Nagłówek */
 header {
-    height: 70px;
+    height: 70px; /* Stała wysokość nagłówka */
     background-color: #ffffff;
-    text-align: center;
-    line-height: 70px;
+    text-align: center; /* Centrowanie tekstu */
+    line-height: 70px; /* Zapewnia pionowe wycentrowanie */
     font-size: 1.5em;
     font-weight: bold;
-    border-bottom: 2px solid #ccc;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtelny cień */
+    border-bottom: 2px solid #ccc; /* Subtelna linia oddzielająca */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Lekki cień dla efektu głębi */
 }
 
-/* Układ strony */
+/* Układ głównego kontenera */
 main {
-    display: flex;
-    height: calc(100% - 70px); /* Odejmujemy wysokość nagłówka */
+    display: flex; /* Użycie flexboxa dla wygodnego układu */
+    height: calc(100% - 70px); /* Wysokość okna minus nagłówek */
     width: 100%;
 }
 
 /* Lewy panel - spis treści */
 .sidebar {
-    width: 150px;
+    width: 150px; /* Stała szerokość paska bocznego */
     background-color: #e9ecef;
-    padding: 15px;
-    overflow-y: auto;
-    min-height: 100%;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); /* Subtelny cień */
+    padding: 15px; /* Wewnętrzny odstęp */
+    overflow-y: auto; /* Przewijanie w pionie tylko gdy potrzebne */
+    min-height: 100%; /* Zapewnia, że sidebar wypełnia całą wysokość */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); /* Cień po prawej stronie */
 }
 
+/* Stylowanie nagłówka spisu treści */
 .sidebar h2 {
     font-size: 1.2em;
     margin-bottom: 10px;
@@ -53,58 +60,65 @@ main {
     text-align: center;
 }
 
+/* Lista spisu treści */
 .sidebar ul {
-    list-style-type: none;
+    list-style-type: none; /* Usunięcie domyślnych kropek */
     padding: 0;
 }
 
+/* Elementy listy */
 .sidebar ul li {
     margin-bottom: 10px;
 }
 
+/* Linki w spisie treści */
 .sidebar ul li a {
-    text-decoration: none;
-    color: #333;
+    text-decoration: none; /* Usunięcie podkreślenia */
+    color: #333; /* Kolor tekstu */
     font-weight: 500;
     padding: 8px 10px;
     display: block;
-    border-radius: 5px;
-    transition: all 0.3s ease;
+    border-radius: 5px; /* Zaokrąglone rogi */
+    transition: all 0.3s ease; /* Płynna zmiana efektów */
 }
 
+/* Efekt podświetlenia linków w spisie treści */
 .sidebar ul li a:hover {
-    background-color: #ff7b00; /* Efekt podświetlenia */
+    background-color: #ff7b00; /* Pomarańczowy efekt podświetlenia */
     color: white;
 }
 
 /* Główna zawartość */
 .content {
-    flex-grow: 1;
+    flex-grow: 1; /* Zajmuje całe dostępne miejsce obok sidebaru */
     background-color: #ffffff;
-    overflow-y: auto; /* Scroll tylko wtedy, gdy potrzeba */
+    overflow-y: auto; /* Przewijanie treści jeśli potrzebne */
     padding: 30px;
 }
 
-/* Dodatkowe formatowanie dla artykułu */
+/* Stylowanie artykułów wewnątrz contentu */
 .content article {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
 }
 
+/* Nagłówki w artykule */
 .content article h2 {
     font-size: 2em;
     margin-bottom: 1em;
     font-weight: 600;
-    border-bottom: 3px solid #ff7b00; /* Akcentowy pasek */
+    border-bottom: 3px solid #ff7b00; /* Pasek podkreślający */
     padding-bottom: 5px;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease; /* Płynna zmiana efektów */
 }
 
+/* Efekt podświetlenia nagłówków w artykule */
 .content article h2:hover {
-    color: #ff7b00; /* Efekt zmiany koloru po najechaniu */
+    color: #ff7b00;
 }
 
+/* Stylowanie paragrafów w artykule */
 .content article p {
     font-size: 1.1em;
     line-height: 1.8;
@@ -112,9 +126,9 @@ main {
     margin-bottom: 2em;
 }
 
-/* Pasek przewijania tylko dla treści */
+/* Pasek przewijania tylko dla `.content` */
 .content::-webkit-scrollbar {
-    width: 8px;
+    width: 8px; /* Szerokość paska przewijania */
 }
 
 .content::-webkit-scrollbar-track {
@@ -128,18 +142,19 @@ main {
     transition: all 0.3s ease;
 }
 
+/* Efekt hover na pasku przewijania */
 .content::-webkit-scrollbar-thumb:hover {
     background: #ff7b00;
 }
 
-/* Efekt pojawiania się */
+/* Efekt pojawiania się treści */
 @keyframes fade-in {
     from {
-        opacity: 0;
-        transform: translateY(10px);
+        opacity: 0; /* Początkowa przezroczystość */
+        transform: translateY(10px); /* Lekki ruch w dół */
     }
     to {
-        opacity: 1;
-        transform: translateY(0);
+        opacity: 1; /* Pełna widoczność */
+        transform: translateY(0); /* Powrót do normalnej pozycji */
     }
 }

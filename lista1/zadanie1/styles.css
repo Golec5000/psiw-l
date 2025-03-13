@@ -1,52 +1,53 @@
-/* Import czcionki Google Fonts */
+/* Import czcionki Google Fonts - Poppins to nowoczesny, bezszeryfowy font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
-/* Resetowanie domyślnych stylów */
+/* Resetowanie domyślnych stylów dla wszystkich elementów */
 * {
-    box-sizing: border-box;
+    box-sizing: border-box; /* Zapobiega rozciąganiu elementów przez padding i border */
     margin: 0;
     padding: 0;
 }
 
 body {
-    font-family: 'Poppins', sans-serif; /* Bezszeryfowy nowoczesny font */
-    background-color: #f4f4f4; /* Subtelne tło */
+    font-family: 'Poppins', sans-serif; /* Ustawienie głównej czcionki */
+    background-color: #f4f4f4; /* Jasnoszare tło dla lepszej czytelności */
     display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 2em 0;
+    justify-content: center; /* Wyśrodkowanie treści w poziomie */
+    align-items: center; /* Wyśrodkowanie treści w pionie */
+    min-height: 100vh; /* Zapewnienie pełnej wysokości okna przeglądarki */
+    padding: 2em 0; /* Dodatkowy odstęp u góry i na dole */
 }
 
-/* Główna sekcja z artykułem */
+/* Główna sekcja artykułu */
 article {
-    max-width: 1024px;
+    max-width: 1024px; /* Maksymalna szerokość kontenera */
     background-color: white;
-    padding: 2em 3em;
-    margin: 0 auto;
-    border-radius: 10px; /* Zaokrąglone rogi */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Elegancki cień */
-    animation: fade-in 0.6s ease-in-out; /* Efekt pojawiania się */
+    padding: 2em 3em; /* Wewnętrzne odstępy */
+    margin: 0 auto; /* Centrowanie artykułu */
+    border-radius: 10px; /* Zaokrąglone rogi dla lepszego wyglądu */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Subtelny cień dla efektu "unoszenia" */
+    animation: fade-in 0.6s ease-in-out; /* Animacja pojawiania się */
 }
 
-/* Nagłówki z gradientem i efektami */
+/* Stylowanie nagłówka H1 */
 h1 {
-    font-size: 2.5em;
-    margin-bottom: 1em;
-    text-align: center;
-    font-weight: 600;
-    color: #333;
-    border-bottom: 3px solid #ff7b00; /* Podkreślenie */
-    padding-bottom: 10px;
+    font-size: 2.5em; /* Rozmiar czcionki */
+    margin-bottom: 1em; /* Odstęp poniżej nagłówka */
+    text-align: center; /* Centrowanie nagłówka */
+    font-weight: 600; /* Pogrubienie czcionki */
+    color: #333; /* Ciemnoszary kolor tekstu */
+    border-bottom: 3px solid #ff7b00; /* Pomarańczowe podkreślenie */
+    padding-bottom: 10px; /* Odstęp między tekstem a podkreśleniem */
 }
 
+/* Stylowanie nagłówków H2 i H3 */
 h2 {
-    font-size: 2em;
-    margin-top: 3em;
-    margin-bottom: 1em;
+    font-size: 2em; /* Rozmiar czcionki */
+    margin-top: 3em; /* Większy odstęp nad nagłówkiem */
+    margin-bottom: 1em; /* Odstęp pod nagłówkiem */
     font-weight: 600;
     color: #444;
-    transition: color 0.3s ease-in-out;
+    transition: color 0.3s ease-in-out; /* Płynna zmiana koloru po najechaniu */
 }
 
 h3 {
@@ -58,33 +59,33 @@ h3 {
     transition: color 0.3s ease-in-out;
 }
 
-/* Efekt podświetlenia nagłówków */
+/* Efekt podświetlenia nagłówków po najechaniu */
 h2:hover, h3:hover {
-    color: #ff7b00; /* Pomarańczowy akcent */
-    cursor: pointer;
+    color: #ff7b00; /* Zmiana koloru na pomarańczowy */
+    cursor: pointer; /* Zmiana kursora na wskaźnik */
 }
 
-/* Styl paragrafów */
+/* Stylowanie akapitów */
 p {
-    font-size: 1.1em;
-    line-height: 1.8;
-    color: #666;
-    margin-bottom: 2em;
+    font-size: 1.1em; /* Rozmiar czcionki dla lepszej czytelności */
+    line-height: 1.8; /* Większy odstęp między liniami */
+    color: #666; /* Kolor lekko przyciemniony */
+    margin-bottom: 2em; /* Odstęp między paragrafami */
 }
 
-/* Odstępy dla sekcji */
+/* Odstępy między sekcjami */
 section {
     margin-bottom: 3em;
 }
 
-/* Efekt fade-in dla eleganckiego wejścia */
+/* Animacja fade-in (efekt pojawiania się) */
 @keyframes fade-in {
     from {
-        opacity: 0;
-        transform: translateY(10px);
+        opacity: 0; /* Początkowa przezroczystość */
+        transform: translateY(10px); /* Lekki przesunięcie w dół */
     }
     to {
-        opacity: 1;
-        transform: translateY(0);
+        opacity: 1; /* Pełna widoczność */
+        transform: translateY(0); /* Powrót do normalnej pozycji */
     }
 }

@@ -2,52 +2,54 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Zapobiega rozciąganiu elementów przez padding i border */
 }
 
+/* Stylowanie całego dokumentu */
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f8f9fa;
-    font-family: Arial, sans-serif;
+    display: flex; /* Użycie Flexboxa do centrowania */
+    justify-content: center; /* Wyśrodkowanie treści w poziomie */
+    align-items: center; /* Wyśrodkowanie treści w pionie */
+    height: 100vh; /* Wysokość strony = wysokość ekranu */
+    background-color: #f8f9fa; /* Jasne tło dla nowoczesnego wyglądu */
+    font-family: Arial, sans-serif; /* Podstawowa czcionka bezszeryfowa */
 }
 
-/* Kontener przycisków */
+/* Kontener na przyciski */
 .button-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px; /* Odstęp między przyciskami */
-    justify-content: flex-start; /* Przyciski od lewej */
-    max-width: 450px;
+    display: flex; /* Układ elastyczny */
+    flex-wrap: wrap; /* Zapewnia przechodzenie przycisków do nowej linii */
+    gap: 10px; /* Odstęp 10px między przyciskami */
+    justify-content: center; /* Wyśrodkowanie */
+    max-width: 400px; /* Maksymalna szerokość */
+    padding: 10px;
 }
 
 /* Stylowanie przycisków */
 .btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 120px;
-    padding: 12px;
+    display: flex; /* Umożliwia wyśrodkowanie tekstu i ikon wewnątrz */
+    align-items: center; /* Centrowanie ikon i tekstu w pionie */
+    justify-content: center; /* Centrowanie w poziomie */
+    gap: 8px; /* Odstęp między ikoną a tekstem */
+    width: 130px; /* Stała szerokość każdego przycisku */
+    padding: 12px; /* Wewnętrzny odstęp */
     border: 2px solid #007bff; /* Niebieskawa ramka */
     border-radius: 8px; /* Zaokrąglone rogi */
     background-color: white;
     font-size: 1em;
     font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s ease-in-out;
+    cursor: pointer; /* Zmiana kursora na wskaźnik */
+    transition: all 0.3s ease-in-out; /* Płynne przejście efektów */
     outline: none;
 }
 
-/* Stylowanie ikon */
+/* Stylowanie ikon wewnątrz przycisku */
 .btn i {
-    font-size: 1.2em;
-    transition: color 0.3s ease-in-out;
+    font-size: 1.2em; /* Powiększenie ikony */
+    transition: color 0.3s ease-in-out; /* Płynne przejście koloru */
 }
 
-/* Efekt hover */
+/* Efekt hover - zmiana koloru tekstu i ikony */
 .btn:hover {
     color: #007bff;
 }
@@ -56,18 +58,42 @@ body {
     color: #007bff;
 }
 
-/* Efekt focus (po Tab) */
+/* Efekt focus (po naciśnięciu Tab) */
 .btn:focus {
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Podświetlenie na niebiesko */
 }
 
-/* Odpowiednie rozmieszczenie w wąskich oknach */
-@media (max-width: 360px) {
+/* Tryb 3 przyciski w jednej linii (domyślny) */
+@media (min-width: 600px) {
     .button-container {
-        justify-content: center;
+        flex-wrap: nowrap; /* Zapobiega zawijaniu, jeśli ekran wystarczająco szeroki */
+    }
+}
+
+/* Tryb 2 przyciski w pierwszym rzędzie + 1 poniżej (średnia szerokość) */
+@media (max-width: 481px) {
+    .button-container {
+        justify-content: space-evenly; /* Równomierne rozmieszczenie */
     }
 
     .btn {
-        width: 100%; /* Przyciski zajmują pełną szerokość */
+        width: 48%; /* Przyciski zajmują połowę szerokości */
+    }
+
+    .btn:last-child {
+        width: 100%; /* Ostatni przycisk pełna szerokość */
+    }
+}
+
+/* Tryb 3 przyciski jeden pod drugim (bardzo wąski ekran) */
+@media (max-width: 480px) {
+    .button-container {
+        flex-direction: column; /* Przyciski w jednej kolumnie */
+        align-items: center; /* Wyśrodkowanie */
+    }
+
+    .btn {
+        width: 100%; /* Pełna szerokość */
+        max-width: 200px; /* Ograniczenie maksymalnej szerokości */
     }
 }
