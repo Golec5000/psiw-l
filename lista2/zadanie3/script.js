@@ -1,44 +1,44 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const notesList = document.getElementById("notesList");
-    const noteForm = document.getElementById("noteForm");
-    const noteTitle = document.getElementById("noteTitle");
-    const noteContent = document.getElementById("noteContent");
-    const noteId = document.getElementById("noteId");
-    const exportBtn = document.getElementById("exportBtn");
-    const importFile = document.getElementById("importFile");
+    const notesList = document.getElementById("notesList"); // Lista notatek
+    const noteForm = document.getElementById("noteForm"); // Formularz dodawania/edycji notatek
+    const noteTitle = document.getElementById("noteTitle"); // Pole tytułu notatki
+    const noteContent = document.getElementById("noteContent"); // Pole treści notatki
+    const noteId = document.getElementById("noteId"); // Ukryte pole ID notatki (dla edycji)
+    const exportBtn = document.getElementById("exportBtn"); // Przycisk eksportu do JSON
+    const importFile = document.getElementById("importFile"); // Pole wyboru pliku JSON do importu
 
-    let notes = [];
+    let notes = []; // Tablica przechowująca notatki
 
-    // Pobranie notatek z localStorage
+    // Pobiera notatki z localStorage i renderuje je na stronie
     function loadNotes() {
         const savedNotes = localStorage.getItem("notes");
-        notes = savedNotes ? JSON.parse(savedNotes) : [];
+        notes = savedNotes ? JSON.parse(savedNotes) : []; // Jeśli dane istnieją, parsujemy je, inaczej tworzymy pustą tablicę
         renderNotes();
     }
 
-    // Zapisanie notatek do localStorage
+    //Zapisuje aktualne notatki do localStorage
     function saveNotes() {
-        localStorage.setItem("notes", JSON.stringify(notes));
+        localStorage.setItem("notes", JSON.stringify(notes)); // Konwersja do JSON i zapis
     }
 
-    // Renderowanie listy notatek
+    // Renderuje listę notatek w interfejsie
     function renderNotes() {
-        notesList.innerHTML = "";
+        notesList.innerHTML = ""; // Czyści listę przed ponownym renderowaniem
         notes.forEach(note => {
             const li = document.createElement("li");
-            li.textContent = note.title;
-            li.classList.add("list-group-item", "list-group-item-action");
-            li.addEventListener("click", () => loadNoteForEdit(note.id));
+            li.textContent = note.title; // Wyświetla tytuł notatki
+            li.classList.add("list-group-item", "list-group-item-action"); // Dodanie klas Bootstrap dla wyglądu
+            li.addEventListener("click", () => loadNoteForEdit(note.id)); // Po kliknięciu ładujemy notatkę do edycji
             notesList.appendChild(li);
         });
     }
 
-    // Obsługa formularza
+    //Obsługuje dodawanie i edytowanie notatek
     noteForm.addEventListener("submit", function (event) {
-        event.preventDefault();
+        event.preventDefault(); // Zapobiega domyślnemu przesyłaniu formularza
 
-        const title = noteTitle.value.trim();
-        const content = noteContent.value.trim();
+        const title = noteTitle.value.trim(); // Pobranie tytułu i usunięcie białych znaków
+        const content = noteContent.value.trim(); // Pobranie treści
 
         if (!title) {
             alert("Title is required.");
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             // Tworzenie nowej notatki
             const newNote = {
-                id: Date.now().toString(),
+                id: Date.now().toString(), // Unikalne ID na podstawie aktualnego czasu
                 title,
                 content
             };
@@ -67,37 +67,37 @@ document.addEventListener("DOMContentLoaded", function () {
         clearForm();
     });
 
-    // Wczytywanie notatki do edycji
+    //Wczytuje notatkę do formularza, aby można ją było edytować
     function loadNoteForEdit(id) {
         const note = notes.find(note => note.id === id);
         if (note) {
-            noteId.value = note.id;
-            noteTitle.value = note.title;
-            noteContent.value = note.content;
+            noteId.value = note.id; // Przypisanie ID notatki do ukrytego pola
+            noteTitle.value = note.title; // Wstawienie tytułu do pola
+            noteContent.value = note.content; // Wstawienie treści do pola
         }
     }
 
-    // Czyszczenie formularza
+    //Czyści formularz po dodaniu/edytowaniu notatki
     function clearForm() {
         noteId.value = "";
         noteTitle.value = "";
         noteContent.value = "";
     }
 
-    // Eksport notatek do pliku JSON
+    //Eksportuje notatki do pliku JSON
     exportBtn.addEventListener("click", function () {
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(notes));
-        const downloadAnchor = document.createElement("a");
+        const downloadAnchor = document.createElement("a"); // Tworzymy ukryty link do pobrania pliku
         downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", "notes.json");
+        downloadAnchor.setAttribute("download", "notes.json"); // Ustawienie nazwy pliku
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
-        document.body.removeChild(downloadAnchor);
+        document.body.removeChild(downloadAnchor); // Usunięcie linku po pobraniu
     });
 
-    // Import notatek z pliku JSON
+    //Importuje notatki z pliku JSON
     importFile.addEventListener("change", function (event) {
-        const file = event.target.files[0];
+        const file = event.target.files[0]; // Pobranie wybranego pliku
         if (!file) return;
 
         const reader = new FileReader();
@@ -105,19 +105,19 @@ document.addEventListener("DOMContentLoaded", function () {
             try {
                 const importedNotes = JSON.parse(e.target.result);
                 if (Array.isArray(importedNotes)) {
-                    notes = importedNotes;
+                    notes = importedNotes; // Nadpisanie aktualnych notatek importowanymi
                     saveNotes();
                     renderNotes();
                 } else {
-                    alert("Invalid JSON format.");
+                    alert("Invalid JSON format."); // Komunikat, jeśli format pliku jest błędny
                 }
             } catch (error) {
-                alert("Error loading JSON file.");
+                alert("Error loading JSON file."); // Obsługa błędów parsowania JSON
             }
         };
-        reader.readAsText(file);
+        reader.readAsText(file); // Odczytanie pliku jako tekst
     });
 
-    // Inicjalizacja aplikacji
+    // Inicjalizacja aplikacji - wczytanie zapisanych notatek po uruchomieniu strony
     loadNotes();
 });

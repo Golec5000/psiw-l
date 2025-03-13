@@ -1,28 +1,29 @@
-/* Resetowanie domyślnych stylów */
+/* Resetowanie domyślnych stylów przeglądarki */
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Zapobiega rozciąganiu elementów przez padding i border */
 }
 
+/* Stylowanie całej strony */
 body {
-    display: flex;
+    display: flex; /* Ustawienie flexboxa dla łatwego centrowania */
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: 100vh; /* Strona zajmuje pełną wysokość okna */
     background-color: #f8f9fa;
     font-family: Arial, sans-serif;
     position: relative;
 }
 
-/* Suwak powinien być zawsze w tym samym miejscu */
+/* Kontener na suwak (zawsze w tej samej pozycji) */
 .slider-container {
     position: absolute;
-    top: 20px;
+    top: 20px; /* Odstęp od góry */
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: center; /* Centrowanie suwaka */
 }
 
 /* Styl suwaka */
@@ -33,29 +34,35 @@ input[type="range"] {
     height: 8px;
     background: #ddd;
     border-radius: 5px;
-    outline: none;
+    outline: none; /* Usunięcie domyślnej obramówki */
 }
 
+/* Styl dla "guzika" suwaka */
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 20px;
     height: 20px;
     background: blueviolet;
-    border-radius: 50%;
+    border-radius: 50%; /* Okrągły kształt */
     cursor: pointer;
 }
 
-/* Styl koła */
+/* Styl dla dynamicznego koła */
 .circle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    font-weight: bold;
+    display: flex; /* Umożliwia centrowanie tekstu */
+    align-items: center; /* Wyrównanie tekstu w pionie */
+    justify-content: center; /* Wyrównanie tekstu w poziomie */
+    font-size: 18px; /* Wielkość tekstu */
+    font-weight: bold; /* Pogrubienie */
     color: black;
-    border: 5px solid blueviolet;
-    border-radius: 50%;
-    transition: all 0.3s ease-in-out;
+    border: 5px solid blueviolet; /* Fioletowa ramka */
+    border-radius: 50%; /* Okrągły kształt */
+    transition: all 0.3s ease-in-out; /* Płynna zmiana rozmiaru */
     position: relative;
+
+    /* Domyślne wartości, aby koło było widoczne na starcie */
+    width: 100px;
+    height: 100px;
+    background-color: hsl(60, 100%, 80%); /* Żółtawy kolor koła */
 }
