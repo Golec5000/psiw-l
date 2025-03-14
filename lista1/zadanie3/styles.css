@@ -70,7 +70,7 @@ body {
     }
 }
 
-/* Tryb 2 przyciski w pierwszym rzędzie + 1 poniżej (średnia szerokość) */
+/* Tryb 2 przyciski w pierwszym rzędzie */
 @media (max-width: 481px) {
     .button-container {
         justify-content: space-evenly; /* Równomierne rozmieszczenie */

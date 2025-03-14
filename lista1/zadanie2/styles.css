@@ -46,7 +46,7 @@ main {
 .sidebar {
     width: 150px; /* Stała szerokość paska bocznego */
     background-color: #e9ecef;
-    padding: 15px; /* Wewnętrzny odstęp */
+    /*padding: 15px; !* Wewnętrzny odstęp *!*/
     overflow-y: auto; /* Przewijanie w pionie tylko gdy potrzebne */
     min-height: 100%; /* Zapewnia, że sidebar wypełnia całą wysokość */
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); /* Cień po prawej stronie */
@@ -93,14 +93,14 @@ main {
     flex-grow: 1; /* Zajmuje całe dostępne miejsce obok sidebaru */
     background-color: #ffffff;
     overflow-y: auto; /* Przewijanie treści jeśli potrzebne */
-    padding: 30px;
+    /*padding: 30px;*/
 }
 
 /* Stylowanie artykułów wewnątrz contentu */
 .content article {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+    max-width: 1600px;
+    /*margin: 0 auto;*/
+    /*padding: 20px;*/
 }
 
 /* Nagłówki w artykule */
