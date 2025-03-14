@@ -5,7 +5,8 @@ Content-Type: application/json
   "customerName": "John Doe",
   "courierName": "DHL",
   "items": [
-    { "productId": 1, "quantity": 2 },
-    { "productId": 3, "quantity": 1 }
+    { "productId": 6, "quantity": 1 },
+    { "productId": 2, "quantity": 1 },
+    { "productId": 4, "quantity": 1 }
   ]
 }
