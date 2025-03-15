@@ -44,24 +44,18 @@ paths:
               schema:
                 $ref: "#/components/schemas/OrderHistory"
   /order-history/update-order-status:
-    patch:
+    put:
       tags:
       - order-history-controller
       summary: Update order history status
       description: Updates the status of an existing order in OrderHistoryService.
       operationId: updateOrderStatus
-      parameters:
-      - name: orderId
-        in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateStatusRequest"
         required: true
-        schema:
-          type: integer
-          format: int64
-      - name: status
-        in: query
-        required: true
-        schema:
-          type: string
       responses:
         "200":
           description: Order status updated
@@ -174,6 +168,14 @@ components:
           type: number
           description: Całkowita cena zamówienia
           example: 2999.99
+    UpdateStatusRequest:
+      type: object
+      properties:
+        orderId:
+          type: integer
+          format: int64
+        status:
+          type: string
     PageResponseOrderHistory:
       type: object
       description: Stronicowana odpowiedź zawierająca listę elementów.

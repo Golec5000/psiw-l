@@ -2,6 +2,7 @@ package com.pwr.psiw.orderservice.service;
 
 import com.pwr.psiw.orderservice.client.api.OrderHistoryControllerApi;
 import com.pwr.psiw.orderservice.client.model.OrderHistory;
+import com.pwr.psiw.orderservice.client.model.UpdateStatusRequest;
 import com.pwr.psiw.orderservice.exeptions.custom.OrderNotFoundException;
 import com.pwr.psiw.orderservice.exeptions.custom.ProductNotFoundException;
 import com.pwr.psiw.orderservice.model.Delivery;
@@ -68,7 +69,7 @@ public class OrderServiceImp implements OrderService {
                 orderItems.stream()
                         .map(item -> item.getProduct().getPrice().multiply(new BigDecimal(item.getQuantity())))
                         .reduce(BigDecimal::add)
-                        .orElse(null)
+                        .orElse(BigDecimal.ZERO)
         );
 
         orderHistoryControllerApi.saveOrderHistory(orderHistory);
@@ -82,7 +83,14 @@ public class OrderServiceImp implements OrderService {
                 .orElseThrow(() -> new OrderNotFoundException("Order not found"));
 
         order.getDelivery().setDeliveryStatus(newStatus);
-        orderHistoryControllerApi.updateOrderStatus(orderId, newStatus.name());
+
+        // Tworzymy obiekt requestu
+        UpdateStatusRequest request = new UpdateStatusRequest();
+        request.setOrderId(orderId);
+        request.setStatus(newStatus.name());
+        orderHistoryControllerApi.updateOrderStatus(request);
+
         return orderRepository.save(order);
     }
+
 }

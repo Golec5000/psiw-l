@@ -53,7 +53,7 @@ public class OrderController {
     @PatchMapping("/update-order")
     public ResponseEntity<Order> updateOrder(
             @Parameter(description = "ID of the order to update") @RequestParam Long orderId,
-            @Parameter(description = "New delivery status") @RequestBody DeliveryStatus newStatus) {
+            @Parameter(description = "New delivery status") @RequestParam DeliveryStatus newStatus) {
         return ResponseEntity.ok(orderService.updateOrder(orderId, newStatus));
     }
 }

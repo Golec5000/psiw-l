@@ -3,6 +3,7 @@ package com.pwr.psiw.orderhistoryservice.controller;
 import com.pwr.psiw.orderhistoryservice.model.OrderHistory;
 import com.pwr.psiw.orderhistoryservice.service.OrderHistoryService;
 import com.pwr.psiw.orderhistoryservice.utils.PageResponse;
+import com.pwr.psiw.orderhistoryservice.utils.UpdateStatusRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -60,12 +61,12 @@ public class OrderHistoryController {
             @ApiResponse(responseCode = "404", description = "Order not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @PatchMapping("/update-order-status")
-    public ResponseEntity<OrderHistory> updateOrderStatus(
-            @RequestParam(value = "orderId") Long orderId,
-            @RequestParam(value = "status") String status) {
-        return ResponseEntity.ok(orderHistoryService.update(orderId, status));
+    @PutMapping("/update-order-status")
+    public ResponseEntity<OrderHistory> updateOrderStatus(@RequestBody UpdateStatusRequest request) {
+        System.out.println("Received PATCH request: " + request);
+        return ResponseEntity.ok(orderHistoryService.update(request.getOrderId(), request.getStatus()));
     }
+
 
 
 }
