@@ -1,9 +1,11 @@
 package com.pwr.psiw.orderhistoryservice.utils;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.hateoas.Link;
+
 import java.util.List;
 
-@Schema(description = "Stronicowana odpowiedź zawierająca listę elementów.")
+@Schema(description = "Stronicowana odpowiedź zawierająca listę elementów oraz linki HATEOAS.")
 public record PageResponse<T>(
         @Schema(description = "Aktualna strona", example = "1")
         int currentPage,
@@ -21,5 +23,8 @@ public record PageResponse<T>(
         boolean last,
 
         @Schema(description = "Czy istnieje kolejna strona", example = "true")
-        boolean hasNext
+        boolean hasNext,
+
+        @Schema(description = "Linki nawigacyjne HATEOAS")
+        List<Link> links
 ) {}

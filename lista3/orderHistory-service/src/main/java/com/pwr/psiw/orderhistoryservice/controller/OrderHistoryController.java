@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,16 +19,15 @@ public class OrderHistoryController {
 
     private final OrderHistoryService orderHistoryService;
 
-    @Operation(summary = "Get all order history entries")
+    @Operation(summary = "Get all order history entries with pagination and HATEOAS links")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Order history entries found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/get-all")
-    public ResponseEntity<PageResponse<OrderHistory>> getAllOrders(
-            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
-    ) {
+    public ResponseEntity<PageResponse<EntityModel<OrderHistory>>> getAllOrders(
+            @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(orderHistoryService.findAll(pageNo, pageSize));
     }
 
@@ -63,7 +63,6 @@ public class OrderHistoryController {
     })
     @PutMapping("/update-order-status")
     public ResponseEntity<OrderHistory> updateOrderStatus(@RequestBody UpdateStatusRequest request) {
-        System.out.println("Received PATCH request: " + request);
         return ResponseEntity.ok(orderHistoryService.update(request.getOrderId(), request.getStatus()));
     }
 

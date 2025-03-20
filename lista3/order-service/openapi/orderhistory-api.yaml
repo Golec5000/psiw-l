@@ -10,6 +10,38 @@ servers:
 - url: http://localhost:8081
   description: Generated server url
 paths:
+  /order-history/update-order-status:
+    put:
+      tags:
+      - order-history-controller
+      summary: Update order history status
+      description: Updates the status of an existing order in OrderHistoryService.
+      operationId: updateOrderStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateStatusRequest"
+        required: true
+      responses:
+        "200":
+          description: Order status updated
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OrderHistory"
+        "404":
+          description: Order not found
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OrderHistory"
+        "500":
+          description: Internal server error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/OrderHistory"
   /order-history/save-order-history:
     post:
       tags:
@@ -33,38 +65,6 @@ paths:
                 $ref: "#/components/schemas/OrderHistory"
         "400":
           description: Invalid request
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/OrderHistory"
-        "500":
-          description: Internal server error
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/OrderHistory"
-  /order-history/update-order-status:
-    put:
-      tags:
-      - order-history-controller
-      summary: Update order history status
-      description: Updates the status of an existing order in OrderHistoryService.
-      operationId: updateOrderStatus
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UpdateStatusRequest"
-        required: true
-      responses:
-        "200":
-          description: Order status updated
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/OrderHistory"
-        "404":
-          description: Order not found
           content:
             '*/*':
               schema:
@@ -111,7 +111,7 @@ paths:
     get:
       tags:
       - order-history-controller
-      summary: Get all order history entries
+      summary: Get all order history entries with pagination and HATEOAS links
       operationId: getAllOrders
       parameters:
       - name: pageNo
@@ -134,15 +134,23 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/PageResponseOrderHistory"
+                $ref: "#/components/schemas/PageResponseEntityModelOrderHistory"
         "500":
           description: Internal server error
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/PageResponseOrderHistory"
+                $ref: "#/components/schemas/PageResponseEntityModelOrderHistory"
 components:
   schemas:
+    UpdateStatusRequest:
+      type: object
+      properties:
+        orderId:
+          type: integer
+          format: int64
+        status:
+          type: string
     OrderHistory:
       type: object
       description: Model reprezentujący historię zamówienia w systemie
@@ -168,17 +176,54 @@ components:
           type: number
           description: Całkowita cena zamówienia
           example: 2999.99
-    UpdateStatusRequest:
+    EntityModelOrderHistory:
       type: object
       properties:
-        orderId:
+        id:
           type: integer
           format: int64
-        status:
+          description: Unikalny identyfikator historii zamówienia
+          example: 1
+        customerName:
           type: string
-    PageResponseOrderHistory:
+          description: "Imię i nazwisko klienta, który złożył zamówienie"
+          example: Jan Kowalski
+        deliveryStatus:
+          type: string
+          description: Aktualny status dostawy zamówienia
+          example: DELIVERED
+        productName:
+          type: string
+          description: "Nazwa produktu, który został zamówiony"
+          example: Laptop Lenovo ThinkPad X1
+        totalPrice:
+          type: number
+          description: Całkowita cena zamówienia
+          example: 2999.99
+        _links:
+          $ref: "#/components/schemas/Links"
+    Link:
       type: object
-      description: Stronicowana odpowiedź zawierająca listę elementów.
+      properties:
+        href:
+          type: string
+        hreflang:
+          type: string
+        title:
+          type: string
+        type:
+          type: string
+        deprecation:
+          type: string
+        profile:
+          type: string
+        name:
+          type: string
+        templated:
+          type: boolean
+    PageResponseEntityModelOrderHistory:
+      type: object
+      description: Stronicowana odpowiedź zawierająca listę elementów oraz linki HATEOAS.
       properties:
         currentPage:
           type: integer
@@ -199,7 +244,7 @@ components:
           type: array
           description: Lista obiektów na danej stronie
           items:
-            $ref: "#/components/schemas/OrderHistory"
+            $ref: "#/components/schemas/EntityModelOrderHistory"
         last:
           type: boolean
           description: Czy jest to ostatnia strona
@@ -208,3 +253,12 @@ components:
           type: boolean
           description: Czy istnieje kolejna strona
           example: true
+        links:
+          type: array
+          description: Linki nawigacyjne HATEOAS
+          items:
+            $ref: "#/components/schemas/Link"
+    Links:
+      type: object
+      additionalProperties:
+        $ref: "#/components/schemas/Link"

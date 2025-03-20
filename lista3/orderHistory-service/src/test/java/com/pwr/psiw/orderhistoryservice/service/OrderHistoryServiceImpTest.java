@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -45,7 +46,7 @@ class OrderHistoryServiceImpTest {
     }
 
     @Test
-    void findAll_ShouldReturnPagedResults() {
+    void findAll_ShouldReturnPagedResultsWithHateoasLinks() {
         // Given
         Pageable pageable = PageRequest.of(0, 2);
         List<OrderHistory> orderHistories = List.of(sampleOrderHistory);
@@ -54,7 +55,7 @@ class OrderHistoryServiceImpTest {
         when(orderHistoryRepository.findAll(pageable)).thenReturn(page);
 
         // When
-        PageResponse<OrderHistory> response = orderHistoryService.findAll(0, 2);
+        PageResponse<EntityModel<OrderHistory>> response = orderHistoryService.findAll(0, 2);
 
         // Then
         assertEquals(0, response.currentPage());
@@ -63,6 +64,11 @@ class OrderHistoryServiceImpTest {
         assertFalse(response.hasNext());
         assertTrue(response.last());
         assertEquals(1, response.content().size());
+
+        // Sprawdzenie, czy linki HATEOAS istnieją
+        EntityModel<OrderHistory> orderModel = response.content().getFirst();
+        assertNotNull(orderModel.getLinks());
+        assertFalse(orderModel.getLinks().isEmpty());
 
         verify(orderHistoryRepository, times(1)).findAll(pageable);
     }
