@@ -12,12 +12,10 @@ import java.math.BigDecimal;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
 @Data
 @Builder
 @Schema(description = "Model reprezentujący historię zamówienia w systemie")
-public class OrderHistory {
+public class OrderHistory{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

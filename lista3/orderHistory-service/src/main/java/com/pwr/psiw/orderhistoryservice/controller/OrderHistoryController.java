@@ -1,6 +1,7 @@
 package com.pwr.psiw.orderhistoryservice.controller;
 
 import com.pwr.psiw.orderhistoryservice.model.OrderHistory;
+import com.pwr.psiw.orderhistoryservice.model.OrderHistoryModel;
 import com.pwr.psiw.orderhistoryservice.service.OrderHistoryService;
 import com.pwr.psiw.orderhistoryservice.utils.PageResponse;
 import com.pwr.psiw.orderhistoryservice.utils.UpdateStatusRequest;
@@ -8,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +25,7 @@ public class OrderHistoryController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/get-all")
-    public ResponseEntity<PageResponse<EntityModel<OrderHistory>>> getAllOrders(
+    public ResponseEntity<PageResponse<OrderHistoryModel>> getAllOrders(
             @RequestParam(value = "pageNo", defaultValue = "0") int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(orderHistoryService.findAll(pageNo, pageSize));

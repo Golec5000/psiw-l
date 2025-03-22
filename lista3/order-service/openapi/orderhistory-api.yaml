@@ -134,13 +134,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/PageResponseEntityModelOrderHistory"
+                $ref: "#/components/schemas/PageResponseOrderHistoryModel"
         "500":
           description: Internal server error
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/PageResponseEntityModelOrderHistory"
+                $ref: "#/components/schemas/PageResponseOrderHistoryModel"
 components:
   schemas:
     UpdateStatusRequest:
@@ -176,52 +176,23 @@ components:
           type: number
           description: Całkowita cena zamówienia
           example: 2999.99
-    EntityModelOrderHistory:
+    OrderHistoryModel:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          description: Unikalny identyfikator historii zamówienia
-          example: 1
         customerName:
           type: string
-          description: "Imię i nazwisko klienta, który złożył zamówienie"
-          example: Jan Kowalski
         deliveryStatus:
           type: string
-          description: Aktualny status dostawy zamówienia
-          example: DELIVERED
         productName:
           type: string
-          description: "Nazwa produktu, który został zamówiony"
-          example: Laptop Lenovo ThinkPad X1
         totalPrice:
           type: number
-          description: Całkowita cena zamówienia
-          example: 2999.99
         _links:
           $ref: "#/components/schemas/Links"
-    Link:
-      type: object
-      properties:
-        href:
-          type: string
-        hreflang:
-          type: string
-        title:
-          type: string
-        type:
-          type: string
-        deprecation:
-          type: string
-        profile:
-          type: string
-        name:
-          type: string
-        templated:
-          type: boolean
-    PageResponseEntityModelOrderHistory:
+    PageResponseOrderHistoryModel:
       type: object
       description: Stronicowana odpowiedź zawierająca listę elementów oraz linki HATEOAS.
       properties:
@@ -244,7 +215,7 @@ components:
           type: array
           description: Lista obiektów na danej stronie
           items:
-            $ref: "#/components/schemas/EntityModelOrderHistory"
+            $ref: "#/components/schemas/OrderHistoryModel"
         last:
           type: boolean
           description: Czy jest to ostatnia strona
@@ -253,11 +224,25 @@ components:
           type: boolean
           description: Czy istnieje kolejna strona
           example: true
-        links:
-          type: array
-          description: Linki nawigacyjne HATEOAS
-          items:
-            $ref: "#/components/schemas/Link"
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+        hreflang:
+          type: string
+        title:
+          type: string
+        type:
+          type: string
+        deprecation:
+          type: string
+        profile:
+          type: string
+        name:
+          type: string
+        templated:
+          type: boolean
     Links:
       type: object
       additionalProperties:

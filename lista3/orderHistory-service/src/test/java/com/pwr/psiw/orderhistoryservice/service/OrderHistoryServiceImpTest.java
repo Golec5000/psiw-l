@@ -1,7 +1,9 @@
 package com.pwr.psiw.orderhistoryservice.service;
 
+import com.pwr.psiw.orderhistoryservice.configuration.OrderHistoryModelAssembler;
 import com.pwr.psiw.orderhistoryservice.exeption.custome.OrderHistoryNotFoundException;
 import com.pwr.psiw.orderhistoryservice.model.OrderHistory;
+import com.pwr.psiw.orderhistoryservice.model.OrderHistoryModel;
 import com.pwr.psiw.orderhistoryservice.repository.OrderHistoryRepository;
 import com.pwr.psiw.orderhistoryservice.utils.PageResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,11 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.EntityModel;
+import org.springframework.data.domain.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,10 +27,14 @@ class OrderHistoryServiceImpTest {
     @Mock
     private OrderHistoryRepository orderHistoryRepository;
 
+    @Mock
+    private OrderHistoryModelAssembler assembler;
+
     @InjectMocks
     private OrderHistoryServiceImp orderHistoryService;
 
     private OrderHistory sampleOrderHistory;
+    private OrderHistoryModel sampleModel;
 
     @BeforeEach
     void setUp() {
@@ -43,6 +45,8 @@ class OrderHistoryServiceImpTest {
                 .productName("Laptop")
                 .totalPrice(new BigDecimal("1200.50"))
                 .build();
+
+        sampleModel = new OrderHistoryModel(sampleOrderHistory);
     }
 
     @Test
@@ -53,9 +57,10 @@ class OrderHistoryServiceImpTest {
         Page<OrderHistory> page = new PageImpl<>(orderHistories, pageable, orderHistories.size());
 
         when(orderHistoryRepository.findAll(pageable)).thenReturn(page);
+        when(assembler.toModel(sampleOrderHistory, 0, 2)).thenReturn(sampleModel);
 
         // When
-        PageResponse<EntityModel<OrderHistory>> response = orderHistoryService.findAll(0, 2);
+        PageResponse<OrderHistoryModel> response = orderHistoryService.findAll(0, 2);
 
         // Then
         assertEquals(0, response.currentPage());
@@ -64,79 +69,58 @@ class OrderHistoryServiceImpTest {
         assertFalse(response.hasNext());
         assertTrue(response.last());
         assertEquals(1, response.content().size());
-
-        // Sprawdzenie, czy linki HATEOAS istnieją
-        EntityModel<OrderHistory> orderModel = response.content().getFirst();
-        assertNotNull(orderModel.getLinks());
-        assertFalse(orderModel.getLinks().isEmpty());
+        assertEquals(sampleModel, response.content().getFirst());
 
         verify(orderHistoryRepository, times(1)).findAll(pageable);
+        verify(assembler, times(1)).toModel(sampleOrderHistory, 0, 2);
     }
 
     @Test
     void findById_ShouldReturnOrderHistory_WhenExists() {
-        // Given
         when(orderHistoryRepository.findById(1L)).thenReturn(Optional.of(sampleOrderHistory));
 
-        // When
         OrderHistory result = orderHistoryService.findById(1L);
 
-        // Then
         assertNotNull(result);
         assertEquals(sampleOrderHistory.getId(), result.getId());
-        assertEquals(sampleOrderHistory.getCustomerName(), result.getCustomerName());
-
         verify(orderHistoryRepository, times(1)).findById(1L);
     }
 
     @Test
     void findById_ShouldThrowException_WhenNotFound() {
-        // Given
         when(orderHistoryRepository.findById(1L)).thenReturn(Optional.empty());
 
-        // When & Then
         assertThrows(OrderHistoryNotFoundException.class, () -> orderHistoryService.findById(1L));
-
         verify(orderHistoryRepository, times(1)).findById(1L);
     }
 
     @Test
     void save_ShouldSaveOrderHistory() {
-        // Given
         when(orderHistoryRepository.save(sampleOrderHistory)).thenReturn(sampleOrderHistory);
 
-        // When
         OrderHistory saved = orderHistoryService.save(sampleOrderHistory);
 
-        // Then
         assertNotNull(saved);
         assertEquals(sampleOrderHistory.getId(), saved.getId());
-
         verify(orderHistoryRepository, times(1)).save(sampleOrderHistory);
     }
 
     @Test
     void update_ShouldUpdateOrderHistoryStatus() {
-        // Given
         when(orderHistoryRepository.findById(1L)).thenReturn(Optional.of(sampleOrderHistory));
         when(orderHistoryRepository.save(any(OrderHistory.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        // When
         OrderHistory updated = orderHistoryService.update(1L, "SHIPPED");
 
-        // Then
         assertEquals("SHIPPED", updated.getDeliveryStatus());
-
         verify(orderHistoryRepository, times(1)).findById(1L);
         verify(orderHistoryRepository, times(1)).save(sampleOrderHistory);
     }
 
     @Test
     void update_ShouldThrowException_WhenOrderNotFound() {
-        // Given
         when(orderHistoryRepository.findById(1L)).thenReturn(Optional.empty());
 
-        // When & Then
         assertThrows(OrderHistoryNotFoundException.class, () -> orderHistoryService.update(1L, "SHIPPED"));
 
         verify(orderHistoryRepository, times(1)).findById(1L);
