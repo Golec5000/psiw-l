@@ -1,6 +1,7 @@
 package com.pwr.psiw.orderservice.service;
 
-import com.pwr.psiw.orderservice.client.api.OrderHistoryControllerApi;
+import com.pwr.psiw.orderservice.client.api.CreatDataApi;
+import com.pwr.psiw.orderservice.client.api.UpdateDataApi;
 import com.pwr.psiw.orderservice.client.model.OrderHistory;
 import com.pwr.psiw.orderservice.client.model.UpdateStatusRequest;
 import com.pwr.psiw.orderservice.exeptions.custom.OrderNotFoundException;
@@ -27,7 +28,8 @@ public class OrderServiceImp implements OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
-    private final OrderHistoryControllerApi orderHistoryControllerApi;
+    private final CreatDataApi creatDataApi;
+    private final UpdateDataApi updateDataApi;
 
 
     @Override
@@ -72,7 +74,7 @@ public class OrderServiceImp implements OrderService {
                         .orElse(BigDecimal.ZERO)
         );
 
-        orderHistoryControllerApi.saveOrderHistory(orderHistory);
+        creatDataApi.saveOrderHistory(orderHistory);
 
         return orderRepository.save(order);
     }
@@ -88,7 +90,7 @@ public class OrderServiceImp implements OrderService {
         UpdateStatusRequest request = new UpdateStatusRequest();
         request.setOrderId(orderId);
         request.setStatus(newStatus.name());
-        orderHistoryControllerApi.updateOrderStatus(request);
+        updateDataApi.updateOrderStatus(request);
 
         return orderRepository.save(order);
     }

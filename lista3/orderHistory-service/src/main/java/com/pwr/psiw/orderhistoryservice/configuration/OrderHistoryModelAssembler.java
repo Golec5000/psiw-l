@@ -6,7 +6,8 @@ import com.pwr.psiw.orderhistoryservice.model.OrderHistoryModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
 public class OrderHistoryModelAssembler extends RepresentationModelAssemblerSupport<OrderHistory, OrderHistoryModel> {

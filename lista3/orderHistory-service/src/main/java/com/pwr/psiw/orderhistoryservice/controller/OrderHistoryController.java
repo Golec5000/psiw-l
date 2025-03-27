@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+//http://localhost:8081/v3/api-docs.yaml
 @RestController
 @RequestMapping("/order-history")
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class OrderHistoryController {
 
     private final OrderHistoryService orderHistoryService;
 
-    @Operation(summary = "Get all order history entries with pagination and HATEOAS links")
+    @Operation(summary = "Get all order history entries with pagination and HATEOAS links", tags = {"read-data"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Order history entries found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
@@ -31,7 +32,7 @@ public class OrderHistoryController {
         return ResponseEntity.ok(orderHistoryService.findAll(pageNo, pageSize));
     }
 
-    @Operation(summary = "Get order history entry by ID")
+    @Operation(summary = "Get order history entry by ID", tags = {"read-data"})
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Order history entry found"),
             @ApiResponse(responseCode = "404", description = "Order not found"),
@@ -43,7 +44,9 @@ public class OrderHistoryController {
     }
 
     @Operation(summary = "Create a new order history entry",
-            description = "Stores a new order record in the history service after an order is created in OrderService.")
+            description = "Stores a new order record in the history service after an order is created in OrderService.",
+            tags = {"creat-data"}
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Order history entry created"),
             @ApiResponse(responseCode = "400", description = "Invalid request"),
@@ -55,7 +58,9 @@ public class OrderHistoryController {
     }
 
     @Operation(summary = "Update order history status",
-            description = "Updates the status of an existing order in OrderHistoryService.")
+            description = "Updates the status of an existing order in OrderHistoryService.",
+            tags = {"update-data"}
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Order status updated"),
             @ApiResponse(responseCode = "404", description = "Order not found"),

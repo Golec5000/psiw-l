@@ -13,7 +13,7 @@ paths:
   /order-history/update-order-status:
     put:
       tags:
-      - order-history-controller
+      - update-data
       summary: Update order history status
       description: Updates the status of an existing order in OrderHistoryService.
       operationId: updateOrderStatus
@@ -45,7 +45,7 @@ paths:
   /order-history/save-order-history:
     post:
       tags:
-      - order-history-controller
+      - creat-data
       summary: Create a new order history entry
       description: Stores a new order record in the history service after an order
         is created in OrderService.
@@ -78,7 +78,7 @@ paths:
   /order-history/get-by-id:
     get:
       tags:
-      - order-history-controller
+      - read-data
       summary: Get order history entry by ID
       operationId: getOrderById
       parameters:
@@ -110,7 +110,7 @@ paths:
   /order-history/get-all:
     get:
       tags:
-      - order-history-controller
+      - read-data
       summary: Get all order history entries with pagination and HATEOAS links
       operationId: getAllOrders
       parameters:

@@ -56,10 +56,9 @@ class OrderHistoryServiceImpTest {
         List<OrderHistory> orderHistories = List.of(sampleOrderHistory);
         Page<OrderHistory> page = new PageImpl<>(orderHistories, pageable, orderHistories.size());
 
+        // When
         when(orderHistoryRepository.findAll(pageable)).thenReturn(page);
         when(assembler.toModel(sampleOrderHistory, 0, 2)).thenReturn(sampleModel);
-
-        // When
         PageResponse<OrderHistoryModel> response = orderHistoryService.findAll(0, 2);
 
         // Then

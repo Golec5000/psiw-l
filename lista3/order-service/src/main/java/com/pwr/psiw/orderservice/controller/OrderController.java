@@ -50,7 +50,7 @@ public class OrderController {
             @ApiResponse(responseCode = "404", description = "Order not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @PatchMapping("/update-order")
+    @PutMapping("/update-order")
     public ResponseEntity<Order> updateOrder(
             @Parameter(description = "ID of the order to update") @RequestParam Long orderId,
             @Parameter(description = "New delivery status") @RequestParam DeliveryStatus newStatus) {
