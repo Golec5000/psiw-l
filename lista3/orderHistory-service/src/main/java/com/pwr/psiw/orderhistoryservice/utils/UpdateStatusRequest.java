@@ -1,13 +1,19 @@
 package com.pwr.psiw.orderhistoryservice.utils;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class UpdateStatusRequest {
-    private Long orderId;
-    private String status;
+public record UpdateStatusRequest(
+
+        @NotNull
+        @Positive
+        @Schema(description = "ID for looking Order History obj")
+        Long orderId,
+
+        @NotEmpty
+        @Schema(description = "Status of the order")
+        String status
+) {
 }

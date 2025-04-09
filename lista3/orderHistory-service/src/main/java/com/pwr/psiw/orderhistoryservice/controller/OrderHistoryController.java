@@ -8,6 +8,7 @@ import com.pwr.psiw.orderhistoryservice.utils.UpdateStatusRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,7 +54,7 @@ public class OrderHistoryController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping("/save-order-history")
-    public ResponseEntity<OrderHistory> saveOrderHistory(@RequestBody OrderHistory orderHistory) {
+    public ResponseEntity<OrderHistory> saveOrderHistory(@Valid @RequestBody OrderHistory orderHistory) {
         return ResponseEntity.ok(orderHistoryService.save(orderHistory));
     }
 
@@ -67,8 +68,8 @@ public class OrderHistoryController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping("/update-order-status")
-    public ResponseEntity<OrderHistory> updateOrderStatus(@RequestBody UpdateStatusRequest request) {
-        return ResponseEntity.ok(orderHistoryService.update(request.getOrderId(), request.getStatus()));
+    public ResponseEntity<OrderHistory> updateOrderStatus(@Valid @RequestBody UpdateStatusRequest request) {
+        return ResponseEntity.ok(orderHistoryService.update(request.orderId(), request.status()));
     }
 
 

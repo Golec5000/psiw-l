@@ -4,6 +4,7 @@ import com.pwr.psiw.orderhistoryservice.exeption.custome.OrderHistoryNotFoundExc
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -20,6 +21,15 @@ public class DefaultExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleException(Exception e, HttpServletRequest request) {
         return createResponseEntity(e, request, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiError> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
+        String errorMessage = ex.getBindingResult().getFieldErrors().stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .reduce((msg1, msg2) -> msg1 + ", " + msg2)
+                .orElse("Validation error");
+        return createResponseEntity(new Exception(errorMessage), request, HttpStatus.BAD_REQUEST);
     }
 
     private ResponseEntity<ApiError> createResponseEntity(Exception e, HttpServletRequest request, HttpStatus status) {

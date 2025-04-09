@@ -3,6 +3,7 @@ package com.pwr.psiw.orderservice.model;
 import com.pwr.psiw.orderservice.utils.DeliveryStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +24,8 @@ public class Delivery {
     private Long id;
 
     @Schema(description = "Name of the courier handling the delivery", example = "DHL")
-    @Column(name = "courier_name")
+    @Column(name = "courier_name", nullable = false)
+    @NotNull
     private String courierName;
 
     @Schema(description = "Current status of the delivery", example = "PICKED_UP")

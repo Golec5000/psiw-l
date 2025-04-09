@@ -3,18 +3,20 @@ package com.pwr.psiw.orderservice.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.*;
 
 import java.util.List;
 
 @Schema(description = "Represents a customer's order, containing order items and delivery details.")
-@Table(name = "orders")
+@Table(name = "orders", indexes = {
+        @Index(name = "idx_order_id_unq", columnList = "id", unique = true)
+})
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Data
 @Builder
 public class Order {
@@ -25,7 +27,8 @@ public class Order {
     private Long id;
 
     @Schema(description = "Name of the customer who placed the order", example = "John Doe")
-    @Column(name = "customer_name")
+    @Column(name = "customer_name", nullable = false)
+    @NotEmpty
     private String customerName;
 
     @Schema(description = "Delivery details associated with the order")

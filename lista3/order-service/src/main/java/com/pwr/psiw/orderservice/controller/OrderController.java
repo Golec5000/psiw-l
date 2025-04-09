@@ -2,14 +2,15 @@ package com.pwr.psiw.orderservice.controller;
 
 import com.pwr.psiw.orderservice.model.Order;
 import com.pwr.psiw.orderservice.service.OrderService;
-import com.pwr.psiw.orderservice.utils.DeliveryStatus;
 import com.pwr.psiw.orderservice.utils.requests.OrderRequest;
+import com.pwr.psiw.orderservice.utils.requests.UpdateOrderStatusRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,13 +30,15 @@ public class OrderController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Order successfully created",
                     content = @Content(schema = @Schema(implementation = Order.class))),
+            @ApiResponse(responseCode = "400", description = "Validation error"),
             @ApiResponse(responseCode = "404", description = "Data not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Internal server error"),
+            @ApiResponse(responseCode = "502", description = "Error while communicating with the order history service")
     })
     @PostMapping("/create-order")
     public ResponseEntity<Order> createOrder(
             @Parameter(description = "Order request containing customer details, order items, and delivery information")
-            @RequestBody OrderRequest orderRequest) {
+            @Valid @RequestBody OrderRequest orderRequest) {
         return ResponseEntity.ok(orderService.createOrder(orderRequest));
     }
 
@@ -48,12 +51,12 @@ public class OrderController {
             @ApiResponse(responseCode = "200", description = "Order status successfully updated",
                     content = @Content(schema = @Schema(implementation = Order.class))),
             @ApiResponse(responseCode = "404", description = "Order not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "500", description = "Internal server error"),
+            @ApiResponse(responseCode = "502", description = "Error while communicating with the order history service")
     })
     @PutMapping("/update-order")
     public ResponseEntity<Order> updateOrder(
-            @Parameter(description = "ID of the order to update") @RequestParam Long orderId,
-            @Parameter(description = "New delivery status") @RequestParam DeliveryStatus newStatus) {
-        return ResponseEntity.ok(orderService.updateOrder(orderId, newStatus));
+            @Valid @RequestBody UpdateOrderStatusRequest updateOrderStatusRequest) {
+        return ResponseEntity.ok(orderService.updateOrder(updateOrderStatusRequest));
     }
 }

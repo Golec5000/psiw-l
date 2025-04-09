@@ -4,6 +4,7 @@ import com.pwr.psiw.orderservice.client.api.CreatDataApi;
 import com.pwr.psiw.orderservice.client.api.UpdateDataApi;
 import com.pwr.psiw.orderservice.client.model.OrderHistory;
 import com.pwr.psiw.orderservice.client.model.UpdateStatusRequest;
+import com.pwr.psiw.orderservice.exeptions.custom.OrderHistoryServiceException;
 import com.pwr.psiw.orderservice.exeptions.custom.OrderNotFoundException;
 import com.pwr.psiw.orderservice.exeptions.custom.ProductNotFoundException;
 import com.pwr.psiw.orderservice.model.Delivery;
@@ -15,8 +16,11 @@ import com.pwr.psiw.orderservice.repository.ProductRepository;
 import com.pwr.psiw.orderservice.utils.DeliveryStatus;
 import com.pwr.psiw.orderservice.utils.requests.OrderItemRequest;
 import com.pwr.psiw.orderservice.utils.requests.OrderRequest;
+import com.pwr.psiw.orderservice.utils.requests.UpdateOrderStatusRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -33,32 +37,31 @@ public class OrderServiceImp implements OrderService {
 
 
     @Override
+    @Transactional
     public Order createOrder(OrderRequest orderRequest) {
         Order order = new Order();
-        order.setCustomerName(orderRequest.getCustomerName());
+        order.setCustomerName(orderRequest.customerName());
 
-        // Tworzenie pozycji zamówienia
         List<OrderItem> orderItems = new ArrayList<>();
-        for (OrderItemRequest itemRequest : orderRequest.getItems()) {
-            Product product = productRepository.findById(itemRequest.getProductId())
+        for (OrderItemRequest itemRequest : orderRequest.items()) {
+            Product product = productRepository.findById(itemRequest.productId())
                     .orElseThrow(() -> new ProductNotFoundException("Product not found"));
 
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(order);
             orderItem.setProduct(product);
-            orderItem.setQuantity(itemRequest.getQuantity());
+            orderItem.setQuantity(itemRequest.quantity());
             orderItems.add(orderItem);
         }
         order.setItems(orderItems);
 
-        // Tworzenie dostawy
         Delivery delivery = new Delivery();
-        delivery.setCourierName(orderRequest.getCourierName());
+        delivery.setCourierName(orderRequest.courierName());
         delivery.setDeliveryStatus(DeliveryStatus.CREATED);
         order.setDelivery(delivery);
 
         OrderHistory orderHistory = new OrderHistory();
-        orderHistory.customerName(orderRequest.getCustomerName());
+        orderHistory.customerName(orderRequest.customerName());
         orderHistory.deliveryStatus(DeliveryStatus.CREATED.name());
         orderHistory.setProductName(
                 orderItems.stream()
@@ -66,7 +69,6 @@ public class OrderServiceImp implements OrderService {
                         .reduce((s1, s2) -> s1 + ", " + s2)
                         .orElse("")
         );
-
         orderHistory.setTotalPrice(
                 orderItems.stream()
                         .map(item -> item.getProduct().getPrice().multiply(new BigDecimal(item.getQuantity())))
@@ -74,23 +76,34 @@ public class OrderServiceImp implements OrderService {
                         .orElse(BigDecimal.ZERO)
         );
 
-        creatDataApi.saveOrderHistory(orderHistory);
+        try {
+            creatDataApi.saveOrderHistory(orderHistory);
+        } catch (RestClientException e) {
+            throw new OrderHistoryServiceException("Failed to sync with OrderHistoryService" + e.getMessage());
+        }
 
         return orderRepository.save(order);
     }
 
+
     @Override
-    public Order updateOrder(Long orderId, DeliveryStatus newStatus) {
-        Order order = orderRepository.findById(orderId)
+    @Transactional
+    public Order updateOrder(UpdateOrderStatusRequest updateOrderStatusRequest) {
+        Order order = orderRepository.findById(updateOrderStatusRequest.orderId())
                 .orElseThrow(() -> new OrderNotFoundException("Order not found"));
 
+        DeliveryStatus newStatus = updateOrderStatusRequest.status();
         order.getDelivery().setDeliveryStatus(newStatus);
 
-        // Tworzymy obiekt requestu
         UpdateStatusRequest request = new UpdateStatusRequest();
-        request.setOrderId(orderId);
+        request.setOrderId(order.getId());
         request.setStatus(newStatus.name());
-        updateDataApi.updateOrderStatus(request);
+
+        try {
+            updateDataApi.updateOrderStatus(request);
+        } catch (RestClientException e) {
+            throw new OrderHistoryServiceException("Failed to sync with OrderHistoryService: " + e.getMessage());
+        }
 
         return orderRepository.save(order);
     }

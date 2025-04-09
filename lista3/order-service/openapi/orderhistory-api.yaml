@@ -149,8 +149,13 @@ components:
         orderId:
           type: integer
           format: int64
+          description: ID for looking Order History obj
         status:
           type: string
+          description: Status of the order
+      required:
+      - orderId
+      - status
     OrderHistory:
       type: object
       description: Model reprezentujący historię zamówienia w systemie
@@ -176,6 +181,11 @@ components:
           type: number
           description: Całkowita cena zamówienia
           example: 2999.99
+      required:
+      - customerName
+      - deliveryStatus
+      - productName
+      - totalPrice
     OrderHistoryModel:
       type: object
       properties:

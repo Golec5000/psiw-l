@@ -3,6 +3,7 @@ package com.pwr.psiw.orderservice.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +23,9 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     @Schema(description = "Quantity of the product ordered", example = "2")
+    @Positive
     private int quantity;
 
     @Schema(description = "The order associated with this item")
