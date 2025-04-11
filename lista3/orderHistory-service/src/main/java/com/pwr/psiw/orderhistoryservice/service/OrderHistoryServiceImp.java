@@ -6,6 +6,7 @@ import com.pwr.psiw.orderhistoryservice.model.OrderHistory;
 import com.pwr.psiw.orderhistoryservice.model.OrderHistoryModel;
 import com.pwr.psiw.orderhistoryservice.repository.OrderHistoryRepository;
 import com.pwr.psiw.orderhistoryservice.utils.PageResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -51,6 +52,7 @@ public class OrderHistoryServiceImp implements OrderHistoryService {
     }
 
     @Override
+    @Transactional
     public OrderHistory update(Long orderId, String status) {
         OrderHistory orderHistory = findOrderById(orderId);
         orderHistory.setDeliveryStatus(status);

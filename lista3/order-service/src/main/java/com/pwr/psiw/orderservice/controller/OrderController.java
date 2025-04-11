@@ -56,6 +56,7 @@ public class OrderController {
     })
     @PutMapping("/update-order")
     public ResponseEntity<Order> updateOrder(
+            @Parameter(description = "Request containing the order ID and the new status to update")
             @Valid @RequestBody UpdateOrderStatusRequest updateOrderStatusRequest) {
         return ResponseEntity.ok(orderService.updateOrder(updateOrderStatusRequest));
     }
