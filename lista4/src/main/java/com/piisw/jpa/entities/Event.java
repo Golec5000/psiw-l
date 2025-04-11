@@ -1,21 +1,36 @@
 package com.piisw.jpa.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+@NamedEntityGraph(
+        name = "Event.comments.followers",
+        attributeNodes = {
+                @NamedAttributeNode("description"),
+                @NamedAttributeNode("time"),
+                @NamedAttributeNode("analysisRequired"),
+                @NamedAttributeNode(value = "comments", subgraph = "commentsSubgraph"),
+                @NamedAttributeNode(value = "followers", subgraph = "followersSubgraph")
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "commentsSubgraph",
+                        attributeNodes = {
+                                @NamedAttributeNode("content")     // pobieramy content z Comment
+                        }
+                ),
+                @NamedSubgraph(
+                        name = "followersSubgraph",
+                        attributeNodes = {
+                                @NamedAttributeNode("subscriptionDate") // pobieramy subscriptionDate z Follower
+                        }
+                )
+        }
+)
 @Entity
 @Getter
 @Setter
@@ -32,6 +47,8 @@ public abstract class Event {
 
     private int duration;
 
+    private String description;
+
     @Column(length = 10)
     private String threadId;
 
@@ -44,5 +61,11 @@ public abstract class Event {
 
     @Column
     private boolean analysisRequired;
+
+    @OneToMany(mappedBy = "event")
+    private List<Comment> comments;
+
+    @ManyToMany
+    private List<Follower> followers;
 
 }

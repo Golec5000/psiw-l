@@ -1,6 +1,7 @@
 package com.piisw.jpa.repositories;
 
 import com.piisw.jpa.entities.Event;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -33,4 +34,8 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     @Query("SELECT new com.piisw.jpa.repositories.ServerStatistic(s, COUNT(e)) "
             + "FROM Event e JOIN e.server s GROUP BY s.id")
     List<ServerStatistic> countEventsPerServer();
+
+    @EntityGraph(value = "Event.comments.followers", type = EntityGraph.EntityGraphType.LOAD)
+    @Query("SELECT e FROM Event e JOIN e.followers f WHERE f.userId = :followerId")
+    List<Event> findAllEventsByFollower(@Param("followerId") Long followerId);
 }
