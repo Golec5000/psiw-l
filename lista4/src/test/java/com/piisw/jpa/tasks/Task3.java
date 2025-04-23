@@ -3,12 +3,11 @@ package com.piisw.jpa.tasks;
 import com.piisw.jpa.entities.Event;
 import com.piisw.jpa.entities.RequestEvent;
 import com.piisw.jpa.repositories.EventRepository;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-
-import jakarta.persistence.EntityManager;
 
 import java.time.LocalDateTime;
 
@@ -26,19 +25,19 @@ class Task3 {
     EventRepository repository;
 
     @Test
-    void shouldDeleteInBulkEventsOlderThan() throws Exception {
+    void shouldDeleteInBulkEventsOlderThan() {
         // given
         LocalDateTime givenDate = LocalDateTime.of(2017, 12, 31, 0, 0);
 
         // when
-        repository.bulkDeleteEventsBefore(givenDate); // replace with repository method call
+        repository.bulkDeleteEventsBefore(givenDate);
 
         // then
         assertThat(new SimpleJpaRepository<Event, Long>(Event.class, entityManager).findAll(), hasSize(32));
     }
 
     @Test
-    void shouldUpdateEventsLongerThanInBulk() throws Exception {
+    void shouldUpdateEventsLongerThanInBulk() {
         // given
         int threshold = 1000;
         Class<RequestEvent> clazz = RequestEvent.class;

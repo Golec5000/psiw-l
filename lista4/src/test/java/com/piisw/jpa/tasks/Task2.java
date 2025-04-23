@@ -13,9 +13,7 @@ import org.springframework.data.domain.Sort;
 import java.time.LocalDateTime;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 @DataJpaTest
 class Task2 {
@@ -24,7 +22,7 @@ class Task2 {
     private EventRepository eventRepository;
 
     @Test
-    void shouldFindOneEntryBetweenDatesThatMustBeAnalyzed() throws Exception {
+    void shouldFindOneEntryBetweenDatesThatMustBeAnalyzed() {
         // given
         LocalDateTime start = LocalDateTime.of(2018, 4, 9, 3, 25);
         LocalDateTime end = LocalDateTime.of(2018, 4, 9, 3, 26);
@@ -43,7 +41,7 @@ class Task2 {
     }
 
     @Test
-    void shouldReturnThirdPageOfEventsSortedByTime() throws Exception {
+    void shouldReturnThirdPageOfEventsSortedByTime() {
         // given
         LocalDateTime start = LocalDateTime.of(2016, 1, 1, 0, 0);
         LocalDateTime end = LocalDateTime.of(2019, 12, 31, 0, 0);
@@ -64,7 +62,7 @@ class Task2 {
     }
 
     @Test
-    void shouldReturnEmptyPage() throws Exception {
+    void shouldReturnEmptyPage() {
         // given
         LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
         LocalDateTime end = LocalDateTime.of(2021, 12, 31, 0, 0);

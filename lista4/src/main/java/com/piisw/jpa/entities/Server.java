@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import org.hibernate.annotations.DialectOverride;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
@@ -35,7 +34,7 @@ public class Server {
     @Column(nullable = false)
     private Boolean isActive = true;
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdDate;
 
     @Column(nullable = false)

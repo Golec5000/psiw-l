@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,6 +37,61 @@ class Task6 {
         follower.setUserId(followerId);
         follower.setSubscriptionDate(LocalDateTime.of(2023, 3, 1, 12, 0));
 
+        Event event = getEvent(follower);
+
+        when(eventRepository.findAllEventsByFollower(followerId)).thenReturn(List.of(event));
+
+        // when
+        List<Event> result = eventService.getEventsByFollower(followerId);
+
+        // then
+        assertNotNull(result);
+        assertEquals(1, result.size());
+
+        Event retrieved = result.getFirst();
+        assertEquals("Testowy opis", retrieved.getDescription());
+        assertTrue(retrieved.isAnalysisRequired());
+        assertEquals(2, retrieved.getComments().size());
+        assertEquals("Pierwszy komentarz", retrieved.getComments().getFirst().getContent());
+        assertEquals(LocalDateTime.of(2023, 3, 1, 12, 0), retrieved.getFollowers().getFirst().getSubscriptionDate());
+
+        verify(eventRepository, times(1)).findAllEventsByFollower(followerId);
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenNoEventsFound() {
+        // given
+        Long followerId = 42L;
+
+        when(eventRepository.findAllEventsByFollower(followerId)).thenReturn(Collections.emptyList());
+
+        // when
+        List<Event> result = eventService.getEventsByFollower(followerId);
+
+        // then
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+
+        verify(eventRepository, times(1)).findAllEventsByFollower(followerId);
+    }
+
+    @Test
+    void shouldHandleNullResultFromRepository() {
+        // given
+        Long followerId = 42L;
+
+        when(eventRepository.findAllEventsByFollower(followerId)).thenReturn(null);
+
+        // when
+        List<Event> result = eventService.getEventsByFollower(followerId);
+
+        // then
+        assertNull(result);
+
+        verify(eventRepository, times(1)).findAllEventsByFollower(followerId);
+    }
+
+    private Event getEvent(Follower follower) {
         Comment comment1 = new Comment();
         comment1.setContent("Pierwszy komentarz");
 
@@ -51,24 +107,6 @@ class Task6 {
 
         comment1.setEvent(event);
         comment2.setEvent(event);
-
-        when(eventRepository.findAllEventsByFollower(followerId)).thenReturn(List.of(event));
-
-        // when
-        List<Event> result = eventService.getEventsByFollower(followerId);
-
-        // then
-        assertNotNull(result);
-        assertEquals(1, result.size());
-
-        Event retrieved = result.get(0);
-        assertEquals("Testowy opis", retrieved.getDescription());
-        assertTrue(retrieved.isAnalysisRequired());
-        assertEquals(2, retrieved.getComments().size());
-        assertEquals("Pierwszy komentarz", retrieved.getComments().get(0).getContent());
-        assertEquals(LocalDateTime.of(2023, 3, 1, 12, 0), retrieved.getFollowers().get(0).getSubscriptionDate());
-
-        verify(eventRepository, times(1)).findAllEventsByFollower(followerId);
+        return event;
     }
 }
-

@@ -49,6 +49,8 @@ public abstract class Event {
 
     private String description;
 
+    private boolean analysisRequired;
+
     @Column(length = 10)
     private String threadId;
 
@@ -58,9 +60,6 @@ public abstract class Event {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SERVER_ID", nullable = false)
     private Server server;
-
-    @Column
-    private boolean analysisRequired;
 
     @OneToMany(mappedBy = "event")
     private List<Comment> comments;

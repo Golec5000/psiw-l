@@ -3,7 +3,6 @@ package com.piisw.jpa.tasks;
 import com.piisw.jpa.configuration.AuditingConfiguration;
 import com.piisw.jpa.entities.Server;
 import com.piisw.jpa.repositories.ServerRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -24,14 +23,14 @@ class Task1 {
     private ServerRepository serverRepository;
 
     @Test
-    void shouldIncrementVersionCounterOnSave() throws Exception {
+    void shouldIncrementVersionCounterOnSave() {
         // given
         Server server = serverRepository.getById(1L);
         Long currentVersion = server.getVersion();
 
         // when
         server.setName("name2");
-        serverRepository.saveAndFlush(server); // we need to force a flush to demonstrate the feature, under normal execution this would happen during transaction commit
+        serverRepository.saveAndFlush(server);
 
         // then
         assertThat("Version counter must be incremented", server.getVersion(), is(2L));
@@ -40,26 +39,26 @@ class Task1 {
 
 
     @Test
-    void shouldSetCreatedDateOnServerDuringSave() throws Exception {
+    void shouldSetCreatedDateOnServerDuringSave() {
         // given
         Server server = new Server("server1", "138.0.1.5");
 
         // when
-        serverRepository.saveAndFlush(server); // we need to force a flush to demonstrate the feature, under normal execution this would happen during transaction commit
+        serverRepository.saveAndFlush(server);
 
         // then
         assertThat("Created date must be set", server.getCreatedDate(), is(notNullValue()));
     }
 
     @Test
-    void shouldUpdateLastUpdateDateOnServerAfterUpdate() throws Exception {
+    void shouldUpdateLastUpdateDateOnServerAfterUpdate() {
         // given
         Server server = serverRepository.getById(1L);
         LocalDateTime base = LocalDateTime.now();
 
         // when
         server.setName("name2");
-        serverRepository.saveAndFlush(server); // we need to force a flush to demonstrate the feature, under normal execution this would happen during transaction commit
+        serverRepository.saveAndFlush(server);
 
         // then
         assertThat("Last update date must be set", server.getLastUpdateDate(), is(notNullValue()));
@@ -67,10 +66,10 @@ class Task1 {
     }
 
     @Test
-    void shouldPerformSoftDelete() throws Exception {
+    void shouldPerformSoftDelete() {
         // given
         Server server = new Server("server 1", "138.0.2.5");
-        serverRepository.saveAndFlush(server); // we need to force a flush to demonstrate the feature, under normal execution this would happen during transaction commit
+        serverRepository.saveAndFlush(server);
 
         // when
         serverRepository.deleteById(server.getId());
