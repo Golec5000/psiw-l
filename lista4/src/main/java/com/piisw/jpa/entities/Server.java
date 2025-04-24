@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE server SET is_active = false WHERE id = ?")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Where(clause = "is_active = true")
 public class Server {

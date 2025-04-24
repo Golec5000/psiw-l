@@ -1,6 +1,7 @@
 package com.piisw.jpa.repositories;
 
 import com.piisw.jpa.entities.Event;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,10 +16,12 @@ import java.util.List;
 public interface EventRepository extends JpaRepository<Event, Long> {
 
     @Modifying
+    @Transactional
     @Query("DELETE FROM Event e WHERE e.time < :time")
     int bulkDeleteEventsBefore(@Param("time") LocalDateTime time);
 
     @Modifying
+    @Transactional
     @Query("UPDATE Event e SET e.analysisRequired = true "
             + "WHERE TYPE(e) = :clazz AND e.duration > :duration")
     int bulkUpdateAnalysisRequiredForSubclass(
