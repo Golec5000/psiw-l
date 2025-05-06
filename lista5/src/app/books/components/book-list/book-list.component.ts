@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { Book } from '../../model/book';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import {Component} from '@angular/core';
+import {Book} from '../../model/book';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 
 @Component({
     selector: 'bs-book-list',

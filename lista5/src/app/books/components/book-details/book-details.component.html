@@ -1,0 +1,13 @@
+<div class="m-3" *ngIf="book">
+  <h2>{{ book.title }}</h2>
+  <h4 class="text-muted">{{ book.author }}</h4>
+  <p><strong>Rok wydania:</strong> {{ book.year }}</p>
+  <p>{{ book.description }}</p>
+
+  <a routerLink="/books" class="btn btn-primary mt-3">← Powrót do listy</a>
+</div>
+
+<div class="m-3" *ngIf="reviews.length > 0">
+  <h3 class="mt-4">Recenzje</h3>
+  <app-review *ngFor="let review of reviews" [review]="review"></app-review>
+</div>
